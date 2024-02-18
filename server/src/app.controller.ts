@@ -1,6 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
 import { ApiOkResponse, ApiProperty } from '@nestjs/swagger';
+import { PrismaClient } from '@prisma/client';
+// Cоздали подключение к нашей базе данных через prisma
+const prisma = new PrismaClient();
 class HelloWorldDto {
   // указываем swagger какой тип нужно сохранить
   @ApiProperty()
@@ -15,8 +18,9 @@ export class AppController {
     type: HelloWorldDto,
   })
   async getHello(): Promise<HelloWorldDto> {
-    // const users = await this.dbService.user.findMany({});
-    // console.log(users);
+    const users = await prisma.user.findMany({});
+    // проверяем что приходят данные через prisma
+    console.log(users);
     return { message: this.appService.getHello() };
   }
 }
